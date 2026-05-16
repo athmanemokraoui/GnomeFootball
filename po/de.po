@@ -1,0 +1,178 @@
+# German translation for GnomeFootball.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnomefootball 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-16 00:00+0000\n"
+"PO-Revision-Date: 2026-05-16 00:00+0000\n"
+"Language-Team: German\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Home"
+msgstr "Heim"
+
+msgid "Away"
+msgstr "Gast"
+
+msgid "Kick-off"
+msgstr "Anstoß"
+
+msgid "GOAL"
+msgstr "TOR!"
+
+msgid "Yellow card"
+msgstr "Gelbe Karte"
+
+msgid "Red card"
+msgstr "Rote Karte"
+
+msgid "Half-time"
+msgstr "Halbzeit"
+
+msgid "Second half"
+msgstr "Zweite Halbzeit"
+
+msgid "Full-time"
+msgstr "Abpfiff"
+
+msgid "Extra time"
+msgstr "Verlängerung"
+
+msgid "Penalty shootout"
+msgstr "Elfmeterschießen"
+
+msgid "Match update"
+msgstr "Spielaktualisierung"
+
+msgid "Spain"
+msgstr "Spanien"
+
+msgid "England"
+msgstr "England"
+
+msgid "Italy"
+msgstr "Italien"
+
+msgid "France"
+msgstr "Frankreich"
+
+msgid "Portugal"
+msgstr "Portugal"
+
+msgid "Germany"
+msgstr "Deutschland"
+
+msgid "UEFA"
+msgstr "UEFA"
+
+msgid "FIFA"
+msgstr "FIFA"
+
+msgid "Match start (kick-off)"
+msgstr "Spielbeginn (Anstoß)"
+
+msgid "Goal"
+msgstr "Tor"
+
+msgid "First half ends"
+msgstr "Ende der ersten Halbzeit"
+
+msgid "Second half starts"
+msgstr "Beginn der zweiten Halbzeit"
+
+msgid "Competitions"
+msgstr "Wettbewerbe"
+
+msgid "Catalog"
+msgstr "Katalog"
+
+msgid "Leagues and teams come from ESPN and are cached locally."
+msgstr "Ligen und Mannschaften stammen von ESPN und werden lokal zwischengespeichert."
+
+msgid "Refresh now"
+msgstr "Jetzt aktualisieren"
+
+msgid "Notify for"
+msgstr "Benachrichtigen für"
+
+msgid "All matches"
+msgstr "Alle Spiele"
+
+msgid "Specific teams only"
+msgstr "Nur bestimmte Mannschaften"
+
+msgid "Teams"
+msgstr "Mannschaften"
+
+msgid "Select teams"
+msgstr "Mannschaften auswählen"
+
+msgid "Teams will appear once the catalog has loaded."
+msgstr "Die Mannschaften erscheinen, sobald der Katalog geladen ist."
+
+msgid "Off"
+msgstr "Aus"
+
+msgid "1 team selected"
+msgstr "1 Mannschaft ausgewählt"
+
+msgid "teams selected"
+msgstr "Mannschaften ausgewählt"
+
+msgid "Events"
+msgstr "Ereignisse"
+
+msgid "Notification types"
+msgstr "Benachrichtigungsarten"
+
+msgid "Choose which match events trigger a notification."
+msgstr "Wähle, welche Spielereignisse eine Benachrichtigung auslösen."
+
+msgid "General"
+msgstr "Allgemein"
+
+msgid "Polling"
+msgstr "Abfrage"
+
+msgid "How often to query ESPN for updates. Lower values catch events sooner but use more bandwidth."
+msgstr "Wie oft ESPN auf Aktualisierungen abgefragt wird. Niedrigere Werte erkennen Ereignisse schneller, verbrauchen jedoch mehr Bandbreite."
+
+msgid "Polling interval (minutes)"
+msgstr "Abfrageintervall (Minuten)"
+
+msgid "Range: 1-30 minutes"
+msgstr "Bereich: 1-30 Minuten"
+
+msgid "Actions"
+msgstr "Aktionen"
+
+msgid "Force a check now"
+msgstr "Sofortige Überprüfung erzwingen"
+
+msgid "Asks the background poller to query ESPN immediately."
+msgstr "Fordert die Hintergrundabfrage auf, ESPN sofort abzufragen."
+
+msgid "Check now"
+msgstr "Jetzt prüfen"
+
+msgid "Catalog not loaded yet"
+msgstr "Katalog noch nicht geladen"
+
+msgid "Catalog loaded"
+msgstr "Katalog geladen"
+
+msgid "Press \"Refresh now\" to load leagues and teams."
+msgstr "„Jetzt aktualisieren\" drücken, um Ligen und Mannschaften zu laden."
+
+msgid "Last refreshed"
+msgstr "Zuletzt aktualisiert"
+
+msgid "refresh recommended"
+msgstr "Aktualisierung empfohlen"
+
+msgid "Refreshing…"
+msgstr "Wird aktualisiert…"
