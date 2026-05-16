@@ -1,0 +1,384 @@
+# Gnome Football
+
+A GNOME Shell extension that delivers native desktop notifications for football
+(soccer) matches. It runs quietly in the background — no panel indicator, no
+tray icon — and only speaks up when something happens in a match you care
+about.
+
+Data comes from ESPN's public soccer API. Configuration lives in the standard
+GNOME Extensions preferences window.
+
+- **UUID:** `gnomefootball@carlosjdelgado`
+- **GNOME Shell:** 48, 49, 50
+- **Language:** GJS (GNOME JavaScript), ES modules
+- **UI toolkit (prefs):** libadwaita 1.4+
+
+---
+
+## Features
+
+- One notification per real event: kickoff, goals, yellow/red cards, half-time,
+  second-half start, full-time, extra time, penalty shootout.
+- Per-competition subscriptions, with two modes:
+  - **All matches** in a league.
+  - **Specific teams** — receive only matches that include any of the teams you
+    pick.
+- 28 leagues and cups across Spain, England, Italy, France, Portugal, Germany,
+  UEFA and FIFA. Team rosters are discovered live from ESPN and cached for 7
+  days.
+- Click a notification to open the match page on espn.com.
+- Crest icons on notifications, with on-disk caching.
+- Cold-start protection: if the extension wakes up while a match is already in
+  progress, past events are absorbed silently instead of spamming you with
+  catch-up notifications.
+- Configurable polling interval (1–30 minutes, default 5).
+- Translated to Spanish, Portuguese, Italian, German and French.
+- Replay/test harness that drives the full pipeline from JSON fixtures, no
+  network required.
+
+---
+
+## Requirements
+
+- GNOME Shell **48, 49 or 50**.
+- `glib-compile-schemas` (ships with `glib2`).
+- `msgfmt` (from `gettext`) — only needed to compile translations.
+- An internet connection (the extension talks to `site.api.espn.com`).
+
+---
+
+## Installation
+
+> The extension is not yet on [extensions.gnome.org](https://extensions.gnome.org).
+> Install from source.
+
+### From source (development install)
+
+```sh
+git clone https://github.com/carlosjdelgado/gnomefootball.git
+cd gnomefootball
+./install.sh
+```
+
+`install.sh` does three things:
+
+1. Compiles the GSettings schema (`schemas/gschemas.compiled`).
+2. Builds gettext `.mo` catalogs from `po/*.po` into `locale/`.
+3. Symlinks the working copy into
+   `~/.local/share/gnome-shell/extensions/gnomefootball@carlosjdelgado` so
+   edits show up without reinstalling.
+
+After that, restart the Shell so it picks up the new extension:
+
+- **X11:** press `Alt+F2`, type `r`, hit `Enter`.
+- **Wayland:** log out and back in (or reboot).
+
+Then enable it:
+
+```sh
+gnome-extensions enable gnomefootball@carlosjdelgado
+gnome-extensions prefs  gnomefootball@carlosjdelgado
+```
+
+### As a packaged zip
+
+```sh
+./package.sh
+# Produces build/gnomefootball@carlosjdelgado.shell-extension.zip
+gnome-extensions install --force build/gnomefootball@carlosjdelgado.shell-extension.zip
+```
+
+---
+
+## Usage
+
+Open the preferences window:
+
+```sh
+gnome-extensions prefs gnomefootball@carlosjdelgado
+```
+
+You'll find three pages:
+
+- **Competitions.** Toggle the leagues you want to follow. For each enabled
+  league, pick **All matches** or **Specific teams**. In team mode, expand
+  "Select teams" and switch on the ones you care about. The FIFA World Cup
+  entry is hidden unless ESPN reports active events.
+- **Events.** Switches for each notification type (match start, goal, yellow
+  card, red card, half-time, second-half start, match end, extra time,
+  penalties).
+- **General.** Polling interval (1–30 min) and a **Check now** button that
+  forces an immediate tick.
+
+That's it. Once you have at least one subscription, the extension will start
+polling and surfacing notifications as matches happen.
+
+### Where state lives
+
+- **Preferences:** GSettings under
+  `/org/gnome/shell/extensions/gnomefootball/`.
+- **Live match state:** `$XDG_DATA_HOME/gnomefootball/live-state.json`
+  (typically `~/.local/share/gnomefootball/live-state.json`).
+- **Crest cache:** `$XDG_CACHE_HOME/gnomefootball/` (typically
+  `~/.cache/gnomefootball/`).
+
+If something looks stuck, you can safely delete the data dir — the extension
+will rebuild it on the next tick.
+
+---
+
+## How it works
+
+Each polling tick does:
+
+1. Read `subscriptions-json` from GSettings to find which league slugs to
+   query.
+2. For every subscribed slug, fetch `/scoreboard` from ESPN.
+3. For matches that pass the subscription filter and are **in progress** (or
+   about to kick off within 10 minutes), fetch the per-match `/summary` for
+   the play-by-play (`keyEvents`).
+4. Diff the new scoreboard + summary against the previous snapshot stored in
+   `live-state.json`. The detector emits one logical event per real
+   transition (kickoff, halftime, goal, card, etc.).
+5. Forward each emitted event to the notifier, which builds a fresh
+   `MessageTray.Notification` so notifications stack instead of replacing.
+6. Persist the updated snapshot. Finished matches are pruned 6 hours after the
+   final whistle.
+
+### Cold-start suppression
+
+The first time the extension sees a match that is **already in progress** (or
+post), it captures a baseline snapshot but emits **zero** notifications. This
+prevents a flood of "catch-up" alerts after a logout/login or extension
+reload. From the next tick onward only true deltas are notified.
+
+### Polling and the pre-match window
+
+Matches in the `pre` state are only fetched when they kick off within the next
+10 minutes (`PRE_MATCH_WATCH_WINDOW_MINUTES`). This keeps the API footprint
+small without missing the kickoff transition.
+
+---
+
+## Project layout
+
+```
+.
+├── metadata.json                      Extension manifest (UUID, shell-version, schema, gettext domain)
+├── extension.js                       Entry point: enable() / disable()
+├── prefs.js                           libadwaita preferences UI (3 pages)
+├── stylesheet.css                     Empty on purpose (no panel UI)
+├── install.sh                         Compile schema + .mo files + symlink into the GNOME extensions dir
+├── package.sh                         Produce a zip ready for extensions.gnome.org
+├── icons/
+│   └── hicolor/scalable/apps/
+│       └── gnomefootball-symbolic.svg Notification + prefs tab icon
+├── lib/
+│   ├── constants.js                   ESPN base URL, league catalog, event types, status enums
+│   ├── espn-api.js                    libsoup3 client with retry/backoff; replay-aware
+│   ├── catalog.js                     /teams discovery, normalized & cached in GSettings (7-day TTL)
+│   ├── event-detector.js              Pure diff function: previousState + scoreboard + summary → events
+│   ├── poller.js                      GLib.timeout-driven tick loop, orchestrates the pipeline
+│   ├── notifier.js                    MessageTray.Source + Notification, crest-aware icon resolution
+│   ├── crest-cache.js                 On-disk PNG cache for team / league logos
+│   ├── storage.js                     JSON read/write under $XDG_DATA_HOME/gnomefootball/
+│   └── replay.js                      Replay-mode: serve scoreboard/summary from JSON fixtures
+├── schemas/
+│   └── org.gnome.shell.extensions.gnomefootball.gschema.xml
+├── po/                                Translation sources (.pot + per-language .po)
+├── locale/                            Compiled .mo files (generated)
+└── test-fixtures/                     Replay-mode JSON fixtures
+    ├── sample-match/                  8-tick PRE→IN→POST run, exercises every event type
+    ├── cold-start-mid-game/           1 tick mid-match — should produce 0 notifications
+    └── keyevents-fix/                 Real LaLiga 2 sample used to validate keyEvents parsing
+```
+
+### GSettings schema
+
+| Key | Type | Default | Purpose |
+|---|---|---|---|
+| `poll-interval-minutes` | `i` (1–30) | `5` | How often to poll ESPN |
+| `event-match-start` | `b` | `true` | Notify on kickoff |
+| `event-goal` | `b` | `true` | Notify on goal |
+| `event-yellow-card` | `b` | `true` | Notify on yellow card |
+| `event-red-card` | `b` | `true` | Notify on red / second-yellow card |
+| `event-half-time-end` | `b` | `true` | Notify at HT |
+| `event-second-half-start` | `b` | `true` | Notify when the 2nd half starts |
+| `event-match-end` | `b` | `true` | Notify at full time |
+| `event-extra-time` | `b` | `true` | Notify on extra time |
+| `event-penalties` | `b` | `true` | Notify on penalty shootout |
+| `subscriptions-json` | `s` | `"{}"` | `{ "<slug>": { "mode": "all"\|"teams", "teams": [id,…] } }` |
+| `catalog-cache-json` | `s` | `"{}"` | Cached league/team catalog |
+| `catalog-fetched-at` | `x` | `0` | UNIX seconds, last successful catalog refresh |
+| `force-check-trigger` | `x` | `0` | Bumped by prefs to force an immediate poll tick |
+| `replay-dir` | `s` | `""` | If non-empty, serve scoreboards/summaries from this directory instead of the network |
+
+---
+
+## Development
+
+### Iterating on the source
+
+The dev workflow assumes you've run `./install.sh` once so the symlink exists.
+
+| What you changed | Action required |
+|---|---|
+| `extension.js` | Disable → enable the extension |
+| `lib/*.js` | Full logout/login (Wayland) or `Alt+F2 r` (X11) |
+| `prefs.js` | Close and reopen the prefs window |
+| `schemas/*.gschema.xml` | Re-run `./install.sh`, then reload the Shell |
+| `po/*.po` | Re-run `./install.sh` to rebuild `locale/*.mo` |
+| Fixtures under `test-fixtures/` | Read every tick — no reload needed |
+
+> **Note on GJS module caching.** On Wayland, disable/enable only re-imports
+> `extension.js`. Everything under `lib/` is cached for the lifetime of the
+> Shell process, so any change inside `lib/` requires a Shell restart. On
+> Wayland that means a logout/login.
+
+### Reading logs
+
+```sh
+journalctl --user -f -o cat /usr/bin/gnome-shell | grep -E '(GnomeFootball|gnomefootball)'
+```
+
+All log lines from the extension are prefixed with `[GnomeFootball]`.
+
+### Forcing an immediate poll
+
+```sh
+gsettings set org.gnome.shell.extensions.gnomefootball force-check-trigger $(date +%s)
+```
+
+The poller listens for changes to that key and runs a tick on the spot.
+
+### Replay-mode (offline testing)
+
+The poller, detector, and notifier work end-to-end against pre-recorded JSON
+fixtures, so you can validate behaviour without waiting for a real match.
+
+```fish
+# 1. Subscribe to the test league (preserves existing subscriptions)
+gsettings set org.gnome.shell.extensions.gnomefootball subscriptions-json (
+    gsettings get org.gnome.shell.extensions.gnomefootball subscriptions-json \
+      | string trim --chars "'" \
+      | jq -c '. + {"test.1": {"mode": "all"}}'
+)
+
+# 2. Enable replay
+gsettings set org.gnome.shell.extensions.gnomefootball replay-dir \
+    "$PWD/test-fixtures/sample-match"
+
+# 3. Clean slate
+rm -f ~/.local/share/gnomefootball/live-state.json
+
+# 4. Drive 8 ticks (sample-match) or 1 tick (cold-start-mid-game)
+for i in (seq 1 8)
+    gsettings set org.gnome.shell.extensions.gnomefootball force-check-trigger (date +%s)
+    sleep 5
+end
+
+# 5. Tear down
+gsettings set org.gnome.shell.extensions.gnomefootball replay-dir ""
+gsettings set org.gnome.shell.extensions.gnomefootball subscriptions-json (
+    gsettings get org.gnome.shell.extensions.gnomefootball subscriptions-json \
+      | string trim --chars "'" \
+      | jq -c 'del(."test.1")'
+)
+```
+
+Expected results:
+
+- `sample-match`: 8 ticks, 7 notifications (kickoff, goal, yellow, half-time,
+  second-half start, red card, full-time).
+- `cold-start-mid-game`: 1 tick, **0 notifications** plus a log line
+  `cold-start baseline ... — suppressing catch-up notifications`.
+
+To add a new fixture set, drop JSON files under
+`test-fixtures/<name>/test.1/` named `scoreboard-NNN.json` and (optionally)
+`summary-NNN-<eventId>.json`, where `NNN` is the tick number starting at
+`000`.
+
+---
+
+## Internationalization
+
+Translations live under `po/`:
+
+- `gnomefootball.pot` — template, regenerated whenever new strings are added.
+- `de.po`, `es.po`, `fr.po`, `it.po`, `pt.po` — per-locale catalogs.
+
+After editing a `.po` file, run `./install.sh` (or `./package.sh`) to rebuild
+the `.mo` files in `locale/`.
+
+To add a new language:
+
+1. `msginit --input=po/gnomefootball.pot --locale=<lang>_<COUNTRY>` to create
+   `po/<lang>.po`.
+2. Translate the entries.
+3. Re-run `./install.sh`.
+
+To refresh the `.pot` template after changing source strings:
+
+```sh
+xgettext --from-code=UTF-8 \
+    --keyword=_ --keyword=N_ \
+    --output=po/gnomefootball.pot \
+    extension.js prefs.js lib/*.js
+```
+
+---
+
+## Contributing
+
+Contributions are welcome — bug reports, fixture additions, new translations,
+extra leagues, UI polish, anything that helps.
+
+### Ground rules
+
+- **Code, identifiers, comments, defaults and the gettext template stay in
+  English.** Translations are the only place for other languages.
+- Keep the no-panel-UI principle. The extension stays invisible until a
+  notification fires; configuration belongs in the prefs window.
+- Don't add features beyond what the task requires; resist premature
+  abstractions.
+- Match the existing style: ES modules, 4-space indentation, no semicolons
+  omitted, prefer explicit imports over `*`.
+
+### Before opening a PR
+
+1. Run `./install.sh` and confirm the extension loads (`journalctl` is clean).
+2. If you changed anything in `lib/poller.js`, `lib/event-detector.js` or
+   `lib/notifier.js`, run the `sample-match` and `cold-start-mid-game`
+   fixtures and check the counts above.
+3. If you touched the schema, bump the relevant defaults in `prefs.js` if
+   needed and verify `glib-compile-schemas schemas/` exits clean.
+4. If you added user-visible strings, refresh `po/gnomefootball.pot` and run
+   `./install.sh` to make sure existing translations still build.
+
+### Good first contributions
+
+- Add a new league slug under `lib/constants.js → COUNTRY_GROUPS` and verify
+  ESPN returns `200 OK` for `/teams` and `/scoreboard` on that slug.
+- Translate `po/gnomefootball.pot` into your language.
+- Capture a new replay fixture for a scenario the existing fixtures don't
+  exercise (own goals, VAR overturns, abandoned matches…).
+
+---
+
+## Troubleshooting
+
+| Symptom | Likely cause / fix |
+|---|---|
+| Extension shows up but never notifies | No subscriptions, or the subscribed leagues have no live matches. Use **Check now** in prefs and watch the logs. |
+| `tick: no subscriptions, skipping` in the journal | The `subscriptions-json` map is empty — open prefs and enable at least one league. |
+| Notifications appear with the generic games-controller icon | The icon theme didn't pick up `gnomefootball-symbolic.svg`. Reinstall via `./install.sh` and reload the Shell. |
+| Burst of catch-up notifications after enabling the extension | Should not happen — file an issue with the journal output. The cold-start logic is designed to suppress these. |
+| `summary <slug>/<id> failed` warnings | Transient ESPN errors. The poller retries with backoff; usually self-heals on the next tick. |
+
+---
+
+## Acknowledgments
+
+- Data: [ESPN's public soccer API](https://site.api.espn.com/) (unofficial).
+- GNOME Shell + libadwaita teams for the platform.
+- All translators contributing under `po/`.
