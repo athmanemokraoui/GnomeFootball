@@ -1,0 +1,14 @@
+{
+  "plays": [
+    {
+      "id": "play-goal-001",
+      "type": { "id": "70", "text": "Goal" },
+      "team": { "id": "86" },
+      "athletesInvolved": [
+        { "displayName": "Vinícius Júnior" }
+      ],
+      "clock": { "displayValue": "12'", "value": 720 },
+      "scoringPlay": true
+    }
+  ]
+}
