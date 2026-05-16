@@ -6,7 +6,7 @@
 
 set -euo pipefail
 
-UUID="gnomefootball@carlos.j.delgado"
+UUID="gnomefootball@carlosjdelgado"
 SRC_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BUILD_DIR="${SRC_DIR}/build"
 STAGE_DIR="${BUILD_DIR}/${UUID}"

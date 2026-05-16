@@ -8,7 +8,7 @@
 
 set -euo pipefail
 
-UUID="gnomefootball@carlos.j.delgado"
+UUID="gnomefootball@carlosjdelgado"
 SRC_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 EXT_DIR="${HOME}/.local/share/gnome-shell/extensions/${UUID}"
 
