@@ -97,7 +97,7 @@ msgstr ""
 msgid "Catalog"
 msgstr ""
 
-msgid "Leagues and teams come from ESPN and are cached locally."
+msgid "Leagues and teams are loaded from a public sports data source and cached locally."
 msgstr ""
 
 msgid "Refresh now"
@@ -145,7 +145,7 @@ msgstr ""
 msgid "Polling"
 msgstr ""
 
-msgid "How often to query ESPN for updates. Lower values catch events sooner but use more bandwidth."
+msgid "How often to check for match updates. Lower values catch events sooner but use more bandwidth."
 msgstr ""
 
 msgid "Polling interval (minutes)"
@@ -160,7 +160,7 @@ msgstr ""
 msgid "Force a check now"
 msgstr ""
 
-msgid "Asks the background poller to query ESPN immediately."
+msgid "Asks the background poller to refresh match data immediately."
 msgstr ""
 
 msgid "Check now"

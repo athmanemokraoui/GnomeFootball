@@ -15,7 +15,7 @@ export default class GnomeFootballExtension extends Extension {
         initReplay(this._settings);
         this._poller = new Poller(this._settings);
         this._poller.enable();
-        console.log('[GnomeFootball] enabled');
+        console.debug('[GnomeFootball] enabled');
     }
 
     disable() {
@@ -26,6 +26,6 @@ export default class GnomeFootballExtension extends Extension {
         disposeReplay();
         disposeNotifier();
         this._settings = null;
-        console.log('[GnomeFootball] disabled');
+        console.debug('[GnomeFootball] disabled');
     }
 }

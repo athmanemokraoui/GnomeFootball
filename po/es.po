@@ -90,8 +90,8 @@ msgstr "Competiciones"
 msgid "Catalog"
 msgstr "Catálogo"
 
-msgid "Leagues and teams come from ESPN and are cached locally."
-msgstr "Las ligas y equipos provienen de ESPN y se guardan en caché local."
+msgid "Leagues and teams are loaded from a public sports data source and cached locally."
+msgstr "Las ligas y equipos se cargan desde una fuente pública de datos deportivos y se guardan en caché local."
 
 msgid "Refresh now"
 msgstr "Actualizar ahora"
@@ -138,8 +138,8 @@ msgstr "General"
 msgid "Polling"
 msgstr "Sondeo"
 
-msgid "How often to query ESPN for updates. Lower values catch events sooner but use more bandwidth."
-msgstr "Cada cuánto consultar ESPN. Valores menores detectan eventos antes pero usan más ancho de banda."
+msgid "How often to check for match updates. Lower values catch events sooner but use more bandwidth."
+msgstr "Cada cuánto consultar actualizaciones de los partidos. Valores menores detectan eventos antes pero usan más ancho de banda."
 
 msgid "Polling interval (minutes)"
 msgstr "Intervalo de sondeo (minutos)"
@@ -153,8 +153,8 @@ msgstr "Acciones"
 msgid "Force a check now"
 msgstr "Forzar una comprobación"
 
-msgid "Asks the background poller to query ESPN immediately."
-msgstr "Pide al sondeo en segundo plano que consulte ESPN de inmediato."
+msgid "Asks the background poller to refresh match data immediately."
+msgstr "Pide al sondeo en segundo plano que actualice los datos de los partidos de inmediato."
 
 msgid "Check now"
 msgstr "Comprobar ahora"

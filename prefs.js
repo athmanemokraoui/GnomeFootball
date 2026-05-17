@@ -129,7 +129,7 @@ export default class GnomeFootballPreferences extends ExtensionPreferences {
         // Action group at the top: refresh and status.
         const actionsGroup = new Adw.PreferencesGroup({
             title: _('Catalog'),
-            description: _('Leagues and teams come from ESPN and are cached locally.'),
+            description: _('Leagues and teams are loaded from a public sports data source and cached locally.'),
         });
         page.add(actionsGroup);
 
@@ -359,7 +359,7 @@ export default class GnomeFootballPreferences extends ExtensionPreferences {
 
         const pollingGroup = new Adw.PreferencesGroup({
             title: _('Polling'),
-            description: _('How often to query ESPN for updates. Lower values catch events sooner but use more bandwidth.'),
+            description: _('How often to check for match updates. Lower values catch events sooner but use more bandwidth.'),
         });
         page.add(pollingGroup);
 
@@ -385,7 +385,7 @@ export default class GnomeFootballPreferences extends ExtensionPreferences {
 
         const forceRow = new Adw.ActionRow({
             title: _('Force a check now'),
-            subtitle: _('Asks the background poller to query ESPN immediately.'),
+            subtitle: _('Asks the background poller to refresh match data immediately.'),
         });
         const forceButton = new Gtk.Button({
             label: _('Check now'),

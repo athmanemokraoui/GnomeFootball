@@ -90,8 +90,8 @@ msgstr "Wettbewerbe"
 msgid "Catalog"
 msgstr "Katalog"
 
-msgid "Leagues and teams come from ESPN and are cached locally."
-msgstr "Ligen und Mannschaften stammen von ESPN und werden lokal zwischengespeichert."
+msgid "Leagues and teams are loaded from a public sports data source and cached locally."
+msgstr "Ligen und Mannschaften werden aus einer öffentlichen Sportdatenquelle geladen und lokal zwischengespeichert."
 
 msgid "Refresh now"
 msgstr "Jetzt aktualisieren"
@@ -138,8 +138,8 @@ msgstr "Allgemein"
 msgid "Polling"
 msgstr "Abfrage"
 
-msgid "How often to query ESPN for updates. Lower values catch events sooner but use more bandwidth."
-msgstr "Wie oft ESPN auf Aktualisierungen abgefragt wird. Niedrigere Werte erkennen Ereignisse schneller, verbrauchen jedoch mehr Bandbreite."
+msgid "How often to check for match updates. Lower values catch events sooner but use more bandwidth."
+msgstr "Wie oft nach Spielaktualisierungen gesucht wird. Niedrigere Werte erkennen Ereignisse schneller, verbrauchen jedoch mehr Bandbreite."
 
 msgid "Polling interval (minutes)"
 msgstr "Abfrageintervall (Minuten)"
@@ -153,8 +153,8 @@ msgstr "Aktionen"
 msgid "Force a check now"
 msgstr "Sofortige Überprüfung erzwingen"
 
-msgid "Asks the background poller to query ESPN immediately."
-msgstr "Fordert die Hintergrundabfrage auf, ESPN sofort abzufragen."
+msgid "Asks the background poller to refresh match data immediately."
+msgstr "Fordert die Hintergrundabfrage auf, die Spieldaten sofort zu aktualisieren."
 
 msgid "Check now"
 msgstr "Jetzt prüfen"

@@ -5,7 +5,7 @@ A GNOME Shell extension that delivers native desktop notifications for football
 tray icon — and only speaks up when something happens in a match you care
 about.
 
-Data comes from ESPN's public soccer API. Configuration lives in the standard
+Data comes from a public soccer data API. Configuration lives in the standard
 GNOME Extensions preferences window.
 
 - **UUID:** `gnomefootball@carlosjdelgado`
@@ -26,9 +26,8 @@ GNOME Extensions preferences window.
   - **Specific teams** — receive only matches that include any of the teams you
     pick.
 - 28 leagues and cups across Spain, England, Italy, France, Portugal, Germany,
-  UEFA and FIFA. Team rosters are discovered live from ESPN and cached for 7
-  days.
-- Click a notification to open the match page on espn.com.
+  UEFA and FIFA. Team rosters are discovered live from the upstream API and
+  cached for 7 days.
 - Crest icons on notifications, with on-disk caching.
 - Cold-start protection: if the extension wakes up while a match is already in
   progress, past events are absorbed silently instead of spamming you with
@@ -43,8 +42,7 @@ GNOME Extensions preferences window.
 ## Screenshots
 
 Native GNOME notifications, with the team crest on the left and the league
-context in the body. Click anywhere on the notification to open the match
-page on espn.com.
+context in the body.
 
 <table>
   <tr>
@@ -53,7 +51,7 @@ page on espn.com.
     <td align="center"><img src="docs/screenshots/notification-red-card.png" alt="Red card notification" /></td>
   </tr>
   <tr>
-    <td align="center"><em>Goal — the scoring team's crest is loaded from ESPN and cached locally.</em></td>
+    <td align="center"><em>Goal — the scoring team's crest is downloaded and cached locally.</em></td>
     <td align="center"><em>Second half start — match-state transitions show the league badge.</em></td>
     <td align="center"><em>Red card — player name, minute, team, and running score.</em></td>
   </tr>
@@ -66,7 +64,8 @@ page on espn.com.
 - GNOME Shell **48, 49 or 50**.
 - `glib-compile-schemas` (ships with `glib2`).
 - `msgfmt` (from `gettext`) — only needed to compile translations.
-- An internet connection (the extension talks to `site.api.espn.com`).
+- An internet connection (the extension fetches data from a public sports data
+  API).
 
 ---
 
@@ -132,7 +131,7 @@ You'll find three pages:
 - **Competitions.** Toggle the leagues you want to follow. For each enabled
   league, pick **All matches** or **Specific teams**. In team mode, expand
   "Select teams" and switch on the ones you care about. The FIFA World Cup
-  entry is hidden unless ESPN reports active events.
+  entry is hidden unless the upstream API reports active events.
 - **Events.** Switches for each notification type (match start, goal, yellow
   card, red card, half-time, second-half start, match end, extra time,
   penalties).
@@ -162,7 +161,7 @@ Each polling tick does:
 
 1. Read `subscriptions-json` from GSettings to find which league slugs to
    query.
-2. For every subscribed slug, fetch `/scoreboard` from ESPN.
+2. For every subscribed slug, fetch `/scoreboard` from the upstream API.
 3. For matches that pass the subscription filter and are **in progress** (or
    about to kick off within 10 minutes), fetch the per-match `/summary` for
    the play-by-play (`keyEvents`).
@@ -184,8 +183,8 @@ reload. From the next tick onward only true deltas are notified.
 ### Polling and the pre-match window
 
 Matches in the `pre` state are only fetched when they kick off within the next
-10 minutes (`PRE_MATCH_WATCH_WINDOW_MINUTES`). This keeps the API footprint
-small without missing the kickoff transition.
+10 minutes (`PRE_MATCH_WATCH_WINDOW_MINUTES`). This keeps the upstream
+footprint small without missing the kickoff transition.
 
 ---
 
@@ -196,7 +195,6 @@ small without missing the kickoff transition.
 ├── metadata.json                      Extension manifest (UUID, version-name, shell-version, schema, gettext domain)
 ├── extension.js                       Entry point: enable() / disable()
 ├── prefs.js                           libadwaita preferences UI (3 pages)
-├── stylesheet.css                     Empty on purpose (no panel UI)
 ├── install.sh                         Compile schema + .mo files + symlink into the GNOME extensions dir
 ├── package.sh                         Produce a zip ready for extensions.gnome.org
 ├── LICENSE                            GPL-2.0-or-later
@@ -206,8 +204,8 @@ small without missing the kickoff transition.
 ├── docs/
 │   └── screenshots/                   PNGs referenced by this README
 ├── lib/
-│   ├── constants.js                   ESPN base URL, league catalog, event types, status enums
-│   ├── espn-api.js                    libsoup3 client with retry/backoff; replay-aware
+│   ├── constants.js                   API base URL, league catalog, event types, status enums
+│   ├── sports-api.js                  libsoup3 client with retry/backoff; replay-aware
 │   ├── catalog.js                     /teams discovery, normalized & cached in GSettings (7-day TTL)
 │   ├── event-detector.js              Pure diff function: previousState + scoreboard + summary → events
 │   ├── poller.js                      GLib.timeout-driven tick loop, orchestrates the pipeline
@@ -229,7 +227,7 @@ small without missing the kickoff transition.
 
 | Key | Type | Default | Purpose |
 |---|---|---|---|
-| `poll-interval-minutes` | `i` (1–30) | `5` | How often to poll ESPN |
+| `poll-interval-minutes` | `i` (1–30) | `5` | How often to poll the upstream API |
 | `event-match-start` | `b` | `true` | Notify on kickoff |
 | `event-goal` | `b` | `true` | Notify on goal |
 | `event-yellow-card` | `b` | `true` | Notify on yellow card |
@@ -390,7 +388,8 @@ extra leagues, UI polish, anything that helps.
 ### Good first contributions
 
 - Add a new league slug under `lib/constants.js → COUNTRY_GROUPS` and verify
-  ESPN returns `200 OK` for `/teams` and `/scoreboard` on that slug.
+  the upstream API returns `200 OK` for `/teams` and `/scoreboard` on that
+  slug.
 - Translate `po/gnomefootball.pot` into your language.
 - Capture a new replay fixture for a scenario the existing fixtures don't
   exercise (own goals, VAR overturns, abandoned matches…).
@@ -405,13 +404,12 @@ extra leagues, UI polish, anything that helps.
 | `tick: no subscriptions, skipping` in the journal | The `subscriptions-json` map is empty — open prefs and enable at least one league. |
 | Notifications appear with the generic games-controller icon | The icon theme didn't pick up `gnomefootball-symbolic.svg`. Reinstall via `./install.sh` and reload the Shell. |
 | Burst of catch-up notifications after enabling the extension | Should not happen — file an issue with the journal output. The cold-start logic is designed to suppress these. |
-| `summary <slug>/<id> failed` warnings | Transient ESPN errors. The poller retries with backoff; usually self-heals on the next tick. |
+| `summary <slug>/<id> failed` warnings | Transient upstream errors. The poller retries with backoff; usually self-heals on the next tick. |
 
 ---
 
 ## Acknowledgments
 
-- Data: [ESPN's public soccer API](https://site.api.espn.com/) (unofficial).
 - GNOME Shell + libadwaita teams for the platform.
 - All translators contributing under `po/`.
 

@@ -7,7 +7,7 @@
       <range min="1" max="30"/>
       <default>5</default>
       <summary>Polling interval in minutes</summary>
-      <description>How often the extension queries ESPN for match updates. Range 1-30 minutes.</description>
+      <description>How often the extension polls for match updates. Range 1-30 minutes.</description>
     </key>
 
     <key name="event-match-start" type="b">
@@ -73,7 +73,7 @@
     <key name="catalog-cache-json" type="s">
       <default>"{}"</default>
       <summary>Cached league and team catalog</summary>
-      <description>JSON snapshot of leagues and teams as returned by ESPN. Refreshed every 7 days.</description>
+      <description>JSON snapshot of leagues and teams as returned by the upstream API. Refreshed every 7 days.</description>
     </key>
 
     <key name="catalog-fetched-at" type="x">
@@ -91,7 +91,7 @@
     <key name="replay-dir" type="s">
       <default>""</default>
       <summary>Replay-mode fixtures directory</summary>
-      <description>If non-empty, espn-api.js reads scoreboard/summary responses from JSON fixtures under this directory instead of fetching from the network. Used for development and integration testing. Empty string disables replay mode.</description>
+      <description>If non-empty, sports-api.js reads scoreboard/summary responses from JSON fixtures under this directory instead of fetching from the network. Used for development and integration testing. Empty string disables replay mode.</description>
     </key>
 
   </schema>

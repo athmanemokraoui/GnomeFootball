@@ -1,7 +1,7 @@
 {
   "uuid": "gnomefootball@carlosjdelgado",
   "name": "Gnome Football",
-  "description": "Native football match notifications using ESPN's unofficial API.",
+  "description": "Native football match notifications: goals, cards, kick-off, half-time and full-time.",
   "version-name": "1.0.0",
   "shell-version": ["48", "49", "50"],
   "url": "https://github.com/carlosjdelgado/GnomeFootball",
