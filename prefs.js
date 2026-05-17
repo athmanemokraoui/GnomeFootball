@@ -104,6 +104,17 @@ export default class GnomeFootballPreferences extends ExtensionPreferences {
 
         // Kick off an async catalog refresh if needed.
         this._maybeRefreshCatalogInBackground();
+
+        // Drop window-scoped references when the prefs window closes so the
+        // PreferencesExtension instance doesn't keep widgets alive between
+        // openings.
+        window.connect('close-request', () => {
+            this._settings = null;
+            this._statusRow = null;
+            this._competitionsPage = null;
+            this._countryGroups = null;
+            return false;
+        });
     }
 
     // ----- Page 1: Competitions ---------------------------------------------

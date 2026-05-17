@@ -2,8 +2,9 @@
   "uuid": "gnomefootball@carlosjdelgado",
   "name": "Gnome Football",
   "description": "Native football match notifications using ESPN's unofficial API.",
+  "version-name": "1.0.0",
   "shell-version": ["48", "49", "50"],
-  "url": "https://github.com/carlosjdelgado/gnomefootball",
+  "url": "https://github.com/carlosjdelgado/GnomeFootball",
   "settings-schema": "org.gnome.shell.extensions.gnomefootball",
   "gettext-domain": "gnomefootball"
 }

@@ -39,6 +39,9 @@ cp -r schemas "${STAGE_DIR}/"
 cp -r locale "${STAGE_DIR}/"
 cp -r icons "${STAGE_DIR}/"
 
+# EGO compiles schemas server-side; don't ship the local compile output.
+rm -f "${STAGE_DIR}/schemas/gschemas.compiled"
+
 echo "==> Creating ZIP"
 ( cd "${STAGE_DIR}" && zip -qr "${OUT_ZIP}" . )
 

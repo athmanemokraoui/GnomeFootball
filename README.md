@@ -9,9 +9,11 @@ Data comes from ESPN's public soccer API. Configuration lives in the standard
 GNOME Extensions preferences window.
 
 - **UUID:** `gnomefootball@carlosjdelgado`
+- **Version:** 1.0.0
 - **GNOME Shell:** 48, 49, 50
 - **Language:** GJS (GNOME JavaScript), ES modules
 - **UI toolkit (prefs):** libadwaita 1.4+
+- **License:** [GPL-2.0-or-later](LICENSE)
 
 ---
 
@@ -38,6 +40,27 @@ GNOME Extensions preferences window.
 
 ---
 
+## Screenshots
+
+Native GNOME notifications, with the team crest on the left and the league
+context in the body. Click anywhere on the notification to open the match
+page on espn.com.
+
+<table>
+  <tr>
+    <td align="center"><img src="docs/screenshots/notification-goal.png" alt="Goal notification" /></td>
+    <td align="center"><img src="docs/screenshots/notification-second-half.png" alt="Second half start notification" /></td>
+    <td align="center"><img src="docs/screenshots/notification-red-card.png" alt="Red card notification" /></td>
+  </tr>
+  <tr>
+    <td align="center"><em>Goal — the scoring team's crest is loaded from ESPN and cached locally.</em></td>
+    <td align="center"><em>Second half start — match-state transitions show the league badge.</em></td>
+    <td align="center"><em>Red card — player name, minute, team, and running score.</em></td>
+  </tr>
+</table>
+
+---
+
 ## Requirements
 
 - GNOME Shell **48, 49 or 50**.
@@ -49,14 +72,20 @@ GNOME Extensions preferences window.
 
 ## Installation
 
-> The extension is not yet on [extensions.gnome.org](https://extensions.gnome.org).
-> Install from source.
+### From extensions.gnome.org
+
+The extension is currently **pending review** at
+[extensions.gnome.org](https://extensions.gnome.org). Once approved, the
+easiest way to install will be from there (search for "Gnome Football" or
+visit the listing URL — to be added here when the listing is live).
+
+In the meantime, use the source install below.
 
 ### From source (development install)
 
 ```sh
-git clone https://github.com/carlosjdelgado/gnomefootball.git
-cd gnomefootball
+git clone https://github.com/carlosjdelgado/GnomeFootball.git
+cd GnomeFootball
 ./install.sh
 ```
 
@@ -164,15 +193,18 @@ small without missing the kickoff transition.
 
 ```
 .
-├── metadata.json                      Extension manifest (UUID, shell-version, schema, gettext domain)
+├── metadata.json                      Extension manifest (UUID, version-name, shell-version, schema, gettext domain)
 ├── extension.js                       Entry point: enable() / disable()
 ├── prefs.js                           libadwaita preferences UI (3 pages)
 ├── stylesheet.css                     Empty on purpose (no panel UI)
 ├── install.sh                         Compile schema + .mo files + symlink into the GNOME extensions dir
 ├── package.sh                         Produce a zip ready for extensions.gnome.org
+├── LICENSE                            GPL-2.0-or-later
 ├── icons/
 │   └── hicolor/scalable/apps/
 │       └── gnomefootball-symbolic.svg Notification + prefs tab icon
+├── docs/
+│   └── screenshots/                   PNGs referenced by this README
 ├── lib/
 │   ├── constants.js                   ESPN base URL, league catalog, event types, status enums
 │   ├── espn-api.js                    libsoup3 client with retry/backoff; replay-aware
@@ -382,3 +414,10 @@ extra leagues, UI polish, anything that helps.
 - Data: [ESPN's public soccer API](https://site.api.espn.com/) (unofficial).
 - GNOME Shell + libadwaita teams for the platform.
 - All translators contributing under `po/`.
+
+---
+
+## License
+
+Released under the **GNU General Public License v2.0 or later**
+(`GPL-2.0-or-later`). See the [LICENSE](LICENSE) file for the full text.
