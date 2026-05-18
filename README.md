@@ -71,14 +71,22 @@ context in the body.
 
 ## Installation
 
-### From extensions.gnome.org
+### From extensions.gnome.org (recommended)
 
-The extension is currently **pending review** at
-[extensions.gnome.org](https://extensions.gnome.org). Once approved, the
-easiest way to install will be from there (search for "Gnome Football" or
-visit the listing URL — to be added here when the listing is live).
+The extension is published at
+**[extensions.gnome.org/extension/10007/gnome-football](https://extensions.gnome.org/extension/10007/gnome-football/)**.
 
-In the meantime, use the source install below.
+Install it through either of the usual paths:
+
+- Open the listing with the
+  [GNOME Shell browser integration](https://gnome.pages.gitlab.gnome.org/gnome-browser-integration/pages/installation-guide.html)
+  installed (Firefox / Chrome / Edge) and flip the toggle to **ON**.
+- Or open the
+  [Extension Manager](https://flathub.org/apps/com.mattjakeman.ExtensionManager)
+  app, search for *Gnome Football*, and click **Install**.
+
+Once installed it's enabled automatically; no shell restart needed. See
+[Usage](#usage) below for the prefs.
 
 ### From source (development install)
 
