@@ -1,0 +1,80 @@
+# Changelog
+
+All notable changes to Gnome Football are documented here.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+## [1.1.0] - TBD
+
+### Added
+
+- Substitution notifications. New `event-substitution` toggle, **off by
+  default** — enable it in preferences to receive a notification each time
+  a player swap happens (`X replaces Y • minute • team • score`).
+- VAR goal-disallowed notifications. When a previously notified goal is
+  overturned (the play vanishes from the upstream feed and the team's
+  score drops), a follow-up notification fires with the original scorer
+  and the corrected score. Gated by the existing `event-goal` toggle —
+  no extra switch.
+- 13 new competitions and 5 new catalog groups:
+  - **Brazil**: Brasileirão Série A, Brasileirão Série B, Copa do Brasil.
+  - **Argentina**: Liga Profesional, Copa Argentina.
+  - **United States**: Major League Soccer, US Open Cup.
+  - **CONMEBOL**: Copa Libertadores, Copa Sudamericana, Recopa
+    Sudamericana (club competitions only).
+  - **CONCACAF**: CONCACAF Champions Cup, Leagues Cup
+    *(conditional — only visible during its summer window)*.
+  - **FIFA**: Club World Cup added alongside the World Cup, both
+    conditional.
+
+### Changed
+
+- Preferences "Competitions" page reworked so it no longer overwhelms with
+  the larger catalog. Each country/federation is now a collapsible row
+  with an `X/Y enabled` subtitle counter; the league subscription, mode
+  switch ("Specific teams only") and the team list are folded into a
+  single nested row so subscribing to a few teams takes fewer clicks.
+- Catalog refresh in preferences now shows a live progress indicator —
+  a spinner replaces the "Refresh now" button while loading, the status
+  row title becomes "Loading catalog…", and the subtitle counts leagues
+  as they arrive (`Fetching leagues and teams (12 / 42)`). The previous
+  silent refresh on prefs open made the window look frozen for the
+  ~30 seconds the upstream calls take.
+
+### Fixed
+
+- Preferences chevrons of nested `AdwExpanderRow` rows (e.g. team
+  selectors) no longer get stuck pointing up and tinted with the accent
+  colour when their parent row is expanded. This was already present in
+  1.0.0 — a libadwaita CSS specificity issue that propagated the parent's
+  `:checked` styling down to descendant chevrons. Worked around with a
+  scoped CSS override that re-asserts the collapsed state on nested rows.
+- Preferences chevrons are now hidden entirely on rows whose expansion is
+  locked (e.g. an unsubscribed league), removing a misleading affordance.
+
+## [1.0.0] - 2026-05-17
+
+Initial release, published on [extensions.gnome.org](https://extensions.gnome.org/extension/10007/).
+
+### Added
+
+- One notification per real event: kickoff, goals, yellow/red cards,
+  half-time, second-half start, full-time, extra time, penalty shootout.
+- Per-competition subscriptions with two modes: **all matches** in a
+  league, or **specific teams** within a league.
+- 28 leagues and cups across Spain, England, Italy, France, Portugal,
+  Germany, UEFA and FIFA. Team rosters discovered live and cached for
+  7 days.
+- Crest icons on notifications, with on-disk caching.
+- Cold-start protection: past events of an in-progress match are absorbed
+  silently instead of producing catch-up notifications.
+- Configurable polling interval (1–30 minutes, default 5).
+- Translations: English, Spanish, Portuguese, Italian, German, French.
+- Replay/test harness driven by JSON fixtures, no network required.
+
+[Unreleased]: https://github.com/carlosjdelgado/GnomeFootball/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/carlosjdelgado/GnomeFootball/compare/v1.0.0...v1.1.0
+[1.0.0]: https://github.com/carlosjdelgado/GnomeFootball/releases/tag/v1.0.0

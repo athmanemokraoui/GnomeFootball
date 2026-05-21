@@ -9,11 +9,12 @@ Data comes from a public soccer data API. Configuration lives in the standard
 GNOME Extensions preferences window.
 
 - **UUID:** `gnomefootball@carlosjdelgado`
-- **Version:** 1.0.0
+- **Version:** 1.1.0
 - **GNOME Shell:** 48, 49, 50
 - **Language:** GJS (GNOME JavaScript), ES modules
 - **UI toolkit (prefs):** libadwaita 1.4+
 - **License:** [GPL-2.0-or-later](LICENSE)
+- **Changelog:** [docs/CHANGELOG.md](docs/CHANGELOG.md)
 
 ---
 
@@ -21,13 +22,18 @@ GNOME Extensions preferences window.
 
 - One notification per real event: kickoff, goals, yellow/red cards, half-time,
   second-half start, full-time, extra time, penalty shootout.
+- VAR goal-disallowed: when a previously-notified goal is overturned, you get
+  a follow-up notification with the original scorer and the corrected score.
+  Gated by the regular goal toggle — no extra switch.
+- Substitutions (opt-in): off by default; enable in preferences to receive a
+  notification each time a player swap happens.
 - Per-competition subscriptions, with two modes:
   - **All matches** in a league.
   - **Specific teams** — receive only matches that include any of the teams you
     pick.
-- 28 leagues and cups across Spain, England, Italy, France, Portugal, Germany,
-  UEFA and FIFA. Team rosters are discovered live from the upstream API and
-  cached for 7 days.
+- 42 leagues and cups across Spain, England, Italy, France, Portugal, Germany,
+  Brazil, Argentina, United States, UEFA, CONMEBOL, CONCACAF and FIFA. Team
+  rosters are discovered live from the upstream API and cached for 7 days.
 - Crest icons on notifications, with on-disk caching.
 - Cold-start protection: if the extension wakes up while a match is already in
   progress, past events are absorbed silently instead of spamming you with
@@ -240,6 +246,7 @@ footprint small without missing the kickoff transition.
 | `event-goal` | `b` | `true` | Notify on goal |
 | `event-yellow-card` | `b` | `true` | Notify on yellow card |
 | `event-red-card` | `b` | `true` | Notify on red / second-yellow card |
+| `event-substitution` | `b` | `false` | Notify on player substitutions (opt-in) |
 | `event-half-time-end` | `b` | `true` | Notify at HT |
 | `event-second-half-start` | `b` | `true` | Notify when the 2nd half starts |
 | `event-match-end` | `b` | `true` | Notify at full time |
@@ -330,6 +337,14 @@ Expected results:
   second-half start, red card, full-time).
 - `cold-start-mid-game`: 1 tick, **0 notifications** plus a log line
   `cold-start baseline ... — suppressing catch-up notifications`.
+- `substitution`: 3 ticks, 2 notifications (kickoff at tick 1, substitution
+  at tick 2). Requires `event-substitution` enabled.
+- `goal-disallowed`: 3 ticks, 3 notifications (kickoff + goal at tick 1,
+  goal disallowed at tick 2). Exercises the VAR-cancellation path: the
+  goal vanishes from `plays` and the team's score drops, so the detector
+  emits a `goal-disallowed` event with the original scorer and the
+  updated score. Gated by the regular `event-goal` toggle — there is no
+  separate switch.
 
 To add a new fixture set, drop JSON files under
 `test-fixtures/<name>/test.1/` named `scoreboard-NNN.json` and (optionally)
