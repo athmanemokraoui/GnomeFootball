@@ -2,9 +2,9 @@
   "leagues": [
     {
       "id": "15",
-      "name": "Test League",
+      "name": "UEFA Champions League",
       "logos": [
-        { "href": "https://a.espncdn.com/i/leaguelogos/soccer/500/15.png" }
+        { "href": "https://a.espncdn.com/i/leaguelogos/soccer/500/2.png" }
       ]
     }
   ],
@@ -13,13 +13,13 @@
       "id": "test-401234567",
       "date": "2026-05-16T19:00:00Z",
       "status": {
-        "period": 2,
+        "period": 1,
         "type": {
-          "id": "28",
-          "state": "post",
-          "description": "Full Time",
-          "detail": "FT",
-          "shortDetail": "FT"
+          "id": "23",
+          "state": "in",
+          "description": "Halftime",
+          "detail": "Halftime",
+          "shortDetail": "HT"
         }
       },
       "competitions": [
@@ -28,7 +28,7 @@
             {
               "id": "86",
               "homeAway": "home",
-              "score": "1",
+              "score": "0",
               "team": {
                 "displayName": "Real Madrid",
                 "shortDisplayName": "Madrid",

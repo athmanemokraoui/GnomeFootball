@@ -2,24 +2,24 @@
   "leagues": [
     {
       "id": "15",
-      "name": "Test League",
+      "name": "UEFA Champions League",
       "logos": [
-        { "href": "https://a.espncdn.com/i/leaguelogos/soccer/500/15.png" }
+        { "href": "https://a.espncdn.com/i/leaguelogos/soccer/500/2.png" }
       ]
     }
   ],
   "events": [
     {
-      "id": "test-401234999",
+      "id": "test-401234567",
       "date": "2026-05-16T19:00:00Z",
       "status": {
-        "period": 2,
+        "period": 5,
         "type": {
           "id": "2",
           "state": "in",
-          "description": "Second Half",
-          "detail": "70'",
-          "shortDetail": "70'"
+          "description": "Penalty Shootout",
+          "detail": "Penalty Shootout",
+          "shortDetail": "PS"
         }
       },
       "competitions": [
@@ -28,7 +28,7 @@
             {
               "id": "86",
               "homeAway": "home",
-              "score": "2",
+              "score": "0",
               "team": {
                 "displayName": "Real Madrid",
                 "shortDisplayName": "Madrid",
@@ -39,7 +39,7 @@
             {
               "id": "83",
               "homeAway": "away",
-              "score": "1",
+              "score": "0",
               "team": {
                 "displayName": "FC Barcelona",
                 "shortDisplayName": "Barcelona",
