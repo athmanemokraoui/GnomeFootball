@@ -525,6 +525,28 @@ export default class GnomeFootballPreferences extends ExtensionPreferences {
         this._settings.bind('open-match-page-on-click', clickRow, 'active', 0);
         notificationsGroup.add(clickRow);
 
+        const muteDefaultRow = new Adw.SwitchRow({
+            title: _('Mute matches by default'),
+            subtitle: _('No match notifies until you un-mute it from the calendar panel.'),
+            active: this._settings.get_boolean('mute-matches-by-default'),
+        });
+        this._settings.bind('mute-matches-by-default', muteDefaultRow, 'active', 0);
+        notificationsGroup.add(muteDefaultRow);
+
+        const panelGroup = new Adw.PreferencesGroup({
+            title: _('Calendar panel'),
+            description: _('A section in the GNOME calendar (date menu) listing your subscribed matches for the selected day.'),
+        });
+        page.add(panelGroup);
+
+        const panelRow = new Adw.SwitchRow({
+            title: _('Show matches in the calendar'),
+            subtitle: _('Browse past, current and upcoming matches by day from the top-bar clock menu.'),
+            active: this._settings.get_boolean('show-today-panel'),
+        });
+        this._settings.bind('show-today-panel', panelRow, 'active', 0);
+        panelGroup.add(panelRow);
+
         const actionsGroup = new Adw.PreferencesGroup({
             title: _('Actions'),
         });

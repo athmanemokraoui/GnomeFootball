@@ -83,10 +83,22 @@
       <description>Send a notification when a penalty shootout begins and for each penalty.</description>
     </key>
 
+    <key name="show-today-panel" type="b">
+      <default>true</default>
+      <summary>Show matches in the calendar panel</summary>
+      <description>When enabled, the GNOME calendar (date menu) shows the subscribed matches for the selected day. Enabled by default.</description>
+    </key>
+
     <key name="open-match-page-on-click" type="b">
       <default>true</default>
       <summary>Open match page when a notification is clicked</summary>
       <description>When enabled, clicking a notification opens the match page in your default browser. Enabled by default.</description>
+    </key>
+
+    <key name="mute-matches-by-default" type="b">
+      <default>false</default>
+      <summary>Mute every match by default</summary>
+      <description>When enabled, no match notifications are shown unless you un-mute a match (via its bell in the calendar panel). When disabled, matches notify normally and you mute the ones you want silenced. Disabled by default.</description>
     </key>
 
     <key name="subscriptions-json" type="s">

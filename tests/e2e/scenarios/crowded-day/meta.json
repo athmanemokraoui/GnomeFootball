@@ -1,0 +1,19 @@
+{
+  "name": "Crowded day — 20 UCL matches today",
+  "slug": "test.1",
+  "eventId": "315488",
+  "steps": [
+    {
+      "label": "LOAD — 20 UCL matches today (max-width stress: live 90+10', two-digit scores)",
+      "expected": "Open the date menu on today: the panel lists 20 UEFA Champions League matches — Real Madrid vs Barcelona live (90+10', 1-1, widest minute column), Liverpool 12-0 Bayern (two-digit home score) and Man City 0-11 Napoli (two-digit away score) to stress the score column, the rest finished internationals with their scores (blank minute), and Tottenham vs Feyenoord upcoming with its kick-off time. Verify NO horizontal scroll and no away-side gap even at this maximum width. Cold-start suppresses notifications for the already-finished/in-progress matches.",
+      "scoreboard": "scoreboard-crowded.json",
+      "injectDate": "now"
+    },
+    {
+      "label": "HOLD — inspect the panel; press [q]+Enter to finish (Enter just reloads the same day)",
+      "expected": "The 15 matches stay on screen while you scroll/hover. Pressing q ends the run and removes the test subscription.",
+      "scoreboard": "scoreboard-crowded.json",
+      "injectDate": "now"
+    }
+  ]
+}
